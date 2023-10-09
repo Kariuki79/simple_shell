@@ -28,19 +28,8 @@ int main(void)
 
 		buffer[chars - 1] = '\0';
 
-		if (fork() == 0)
-		{
-			if (execve(buffer, NULL, NULL) == -1)
-			{
-				perror(buffer);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			wait(NULL);
-		}
+		handle_command(buffer);
 	}
-
+	
 	return (0);
 }
