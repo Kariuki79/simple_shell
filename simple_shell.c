@@ -30,6 +30,6 @@ int main(void)
 
 		handle_command(buffer);
 	}
-	
+
 	return (0);
 }
