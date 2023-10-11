@@ -19,22 +19,16 @@ void handle_command(char *buffer)
 		token = strtok(NULL, " ");
 	}
 
-	args[arg_count] = NULL;
-
-	if (access(args[0], X_OK) == 0)
+	if (fork() == 0)
 	{
-
-		if (fork() == 0)
+		if (execve(args[0], args, NULL) == -1)
 		{
-			if (execve(args[0], args, NULL) == -1)
-			{
-				perror(args[0]);
-				exit(EXIT_FAILURE);
-			}
+			perror(args[0]);
+			exit(EXIT_FAILURE);
 		}
-		else
-		{
-			wait(NULL);
-		}
+	}
+	else
+	{
+		wait(NULL);
 	}
 }
