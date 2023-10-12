@@ -1,4 +1,4 @@
-#include "simple.h"
+#include "shell.h"
 
 /**
  * handle_command - Function that handles command line arguments

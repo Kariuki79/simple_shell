@@ -1,4 +1,4 @@
-#include "simple.h"
+#include "shell.h"
 
 /**
  * handle_command - Function that handles command line arguments
@@ -19,16 +19,22 @@ void handle_command(char *buffer)
 		token = strtok(NULL, " ");
 	}
 
-	if (fork() == 0)
+	args[arg_count] = NULL;
+
+	if (access(args[0], X_OK) == 0)
 	{
-		if (execve(args[0], args, NULL) == -1)
+
+		if (fork() == 0)
 		{
-			perror(args[0]);
-			exit(EXIT_FAILURE);
+			if (execve(args[0], args, NULL) == -1)
+			{
+				perror(args[0]);
+				exit(EXIT_FAILURE);
+			}
 		}
-	}
-	else
-	{
-		wait(NULL);
+		else
+		{
+			wait(NULL);
+		}
 	}
 }

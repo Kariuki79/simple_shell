@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "shell.h"
 
 /**
  * main - Entry point
@@ -15,7 +16,7 @@ int main(void)
 
 	while (1)
 	{
-		printf("$");
+		printf("$ ");
 		chars = getline(&buffer, &bufsize, stdin);
 
 		if (chars == -1)

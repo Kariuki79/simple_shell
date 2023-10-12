@@ -7,6 +7,6 @@
 
 int main(void)
 {
-	printf("Shell is the second group project");
+	printf("Shell is the second group project\n");
 	return (0);
 }
