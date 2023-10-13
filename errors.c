@@ -20,7 +20,8 @@ void eputs(char *str)
 /**
  * eputchar - writes a character to stderr
  * @c: the character to print
- * @return: On success, 1 is returned. On error, -1 is returned, and errno is set appropriately.
+ * @return: On success, 1 is returned. On error, -1 is returned,
+ * and errno is set appropriately.
  */
 int eputchar(char c)
 {
@@ -41,12 +42,14 @@ int eputchar(char c)
  * putfd - writes a character to a given file descriptor
  * @c: The character to print
  * @fd: The file descriptor to write to
- * @return: On success, 1 is returned. On error, -1 is returned, and errno is set appropriately.
+ * @return: On success, 1 is returned. On error, -1 is returned,
+ * and errno is set appropriately.
  */
 int putfd(char c, int fd)
 {
 	static int m;
 	static char buffer[WRITE_BUFFER_SIZE];
+
 	if (c == BUFFER_FLUSH || m >= WRITE_BUFFER_SIZE)
 	{
 		write(fd, buffer, m);
@@ -75,4 +78,3 @@ int putsfd(char *str, int fd)
 	}
 	return (m);
 }
-
