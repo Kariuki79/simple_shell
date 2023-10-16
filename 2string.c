@@ -16,8 +16,8 @@ char *custom_copy_string(char *dest, char *src)
 
 	while (src[index])
 	{
-	    dest[index] = src[index];
-	    index++;
+		dest[index] = src[index];
+		index++;
 	}
 	dest[index] = 0;
 	return (dest);
