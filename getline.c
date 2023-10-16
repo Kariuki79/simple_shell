@@ -1,5 +1,4 @@
-#include "custom_shell.h"
-
+#include ":shell.h"
 /**
  * buffer_input - buffers chained commands for processing
  * @info: Parameter struct
@@ -9,33 +8,32 @@
  */
 ssize_t buffer_input(info_t *info, char **command_buffer, size_t *command_length)
 {
-    ssize_t bytes_read = 0;
-    size_t buffer_length = 0;
+	ssize_t bytes_read = 0;
+	size_t buffer_length = 0;
 
-    if (!*command_length)
-    {
-        free(*command_buffer);
-        *command_buffer = NULL;
-        signal(SIGINT, custom_sigintHandler);
-        bytes_read = custom_getline(command_buffer, &buffer_length, stdin);
-        if (bytes_read > 0)
-        {
-            if ((*command_buffer)[bytes_read - 1] == '\n')
-            {
-                (*command_buffer)[bytes_read - 1] = '\0'; // Remove trailing newline
-                bytes_read--;
-            }
-            info->linecount_flag = 1;
-            remove_comments(*command_buffer);
-            build_custom_history(info, *command_buffer, info->histcount++);
-            // Check for command chaining if (_strchr(*command_buffer, ';'))
-            {
-                *command_length = bytes_read;
-                info->cmd_buf = command_buffer;
-            }
-        }
-    }
-    return bytes_read;
+	if (!*command_length)
+	{
+		free(*command_buffer);
+		*command_buffer = NULL;
+		signal(SIGINT, custom_sigintHandler);
+		bytes_read = custom_getline(command_buffer, &buffer_length, stdin);
+
+		if (bytes_read > 0)
+		{
+			if ((*command_buffer)[bytes_read - 1] == '\n')
+			{
+				(*command_buffer)[bytes_read - 1] = '\0';
+				bytes_read--;
+			}
+			info->linecount_flag = 1;
+			remove_comments(*command_buffer);
+			build_custom_history(info, *command_buffer, info->histcount++)
+				*command_length = bytes_read;
+			info->cmd_buf = command_buffer;
+		}
+	}
+}
+return (bytes_read);
 }
 
 /**
