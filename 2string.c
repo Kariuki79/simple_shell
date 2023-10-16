@@ -1,4 +1,4 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
  * custom_copy_string - copies a string
@@ -9,19 +9,18 @@
  */
 char *custom_copy_string(char *dest, char *src)
 {
-    int i = 0;
+	int index = 0;
 
-    if (dest == src || src == 0)
-        return dest;
+	if (dest == src || src == 0)
+		return (dest);
 
-    while (src[i])
-    {
-        dest[i] = src[i];
-        i++;
-    }
-
-    dest[i] = 0;
-    return dest;
+	while (src[index])
+	{
+	    dest[index] = src[index];
+	    index++;
+	}
+	dest[index] = 0;
+	return (dest);
 }
 
 /**
@@ -32,26 +31,25 @@ char *custom_copy_string(char *dest, char *src)
  */
 char *custom_duplicate_string(const char *str)
 {
-    int length = 0;
-    char *ret;
+	int length = 0;
+	char *ret;
 
-    if (str == NULL)
-        return NULL;
+	if (str == NULL)
+		return (NULL);
 
-    while (*str++)
-        length++;
+	while (*str++)
+		length++;
 
-    ret = malloc(sizeof(char) * (length + 1));
+	ret = malloc(sizeof(char) * (length + 1));
 
-    if (!ret)
-        return NULL;
+	if (!ret)
+		return (NULL);
 
-    for (length++; length--;)
-        ret[length] = *--str;
+	for (length++; length--;)
+		ret[length] = *--str;
 
-    return ret;
+	return (ret);
 }
-
 /**
  * custom_print_string - prints an input string
  * @str: The string to be printed
@@ -60,16 +58,15 @@ char *custom_duplicate_string(const char *str)
  */
 void custom_print_string(char *str)
 {
-    int i = 0;
+	int index = 0;
 
-    if (!str)
-        return;
-
-    while (str[i] != '\0')
-    {
-        custom_put_character(str[i]);
-        i++;
-    }
+	if (!str)
+		return;
+	while (str[index] != '\0')
+	{
+		custom_put_character(str[i]);
+		index++;
+	}
 }
 
 /**
@@ -81,18 +78,18 @@ void custom_print_string(char *str)
  */
 int custom_put_character(char c)
 {
-    static int i;
-    static char buffer[WRITE_BUFFER_SIZE];
+	static int index;
+	static char buffer[WRITE_BUFFER_SIZE];
 
-    if (c == BUFFER_FLUSH || i >= WRITE_BUFFER_SIZE)
-    {
-        write(1, buffer, i);
-        i = 0;
-    }
+	if (c == BUFFER_FLUSH || index >= WRITE_BUFFER_SIZE)
+	{
+		write(1, buffer, index);
+		index = 0;
+	}
 
-    if (c != BUFFER_FLUSH)
-        buffer[i++] = c;
+	if (c != BUFFER_FLUSH)
+		buffer[index++] = c;
 
-    return 1;
+	return (1);
 }
 
