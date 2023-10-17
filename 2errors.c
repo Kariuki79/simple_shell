@@ -1,11 +1,11 @@
 #include "shell.h"
 /**
- * str_to_integer - converts a string to an integer
+ * _erratoi - converts a string to an integer
  * @str: the string to be converted
  * Return: 0 if no numbers in string, converted number otherwise
  * -1 on error
  */
-int str_to_integer(char *str)
+int _erratoi(char *str)
 {
 	int index = 0;
 	unsigned long int result = 0;
@@ -32,36 +32,37 @@ int str_to_integer(char *str)
 
 
 /**
- * print_error_message - prints an error message
- * @info: the parameter & return info struct
+ * print_error - prints an error message
+ * @iterator: the parameter and return info struct
  * @error_string: string containing specified error type
  * Return: void
  */
-void print_error_message(info_t *info, char *error_string)
+void print_error_message(info_t *iterator, char *error_string)
 {
-	_puts(info->fname);
-	_puts(": ");
-	print_integer(info->line_number, STDERR_FILENO);
-	_puts(": ");
-	_puts(info->argv[0]);
-	_puts(": ");
-	_puts(error_string);
+	_eputs(iterator->fname);
+	_eputs(": ");
+	print_error_message(iterator->line_number, STDERR_FILENO);
+	_eputs(": ");
+	_eputs(info->argv[0]);
+	_eputs(": ");
+	_eputs(error_string);
 }
 
 /**
  * print_integer - function prints an integer
  * @number: the integer to print
  * @fd: the file descriptor to write to
+ *
  * Return: number of characters printed
  */
 int print_integer(int number, int fd)
 {
-	int (*write_character)(char) = putfd;
+	int (*write_character)(char) = eputchar;
 	int index, count = 0;
 	unsigned int absolute_value, current;
 
 	if (fd == STDERR_FILENO)
-		write_character = _eputchar;
+		write_character = eputchar;
 	if (number < 0)
 	{
 		absolute_value = -number;

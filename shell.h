@@ -143,7 +143,7 @@ char *custom_duplicate_string(const char *);
 void custom_print_string(char *);
 int custom_put_character(char);
 
-/* toem_exits.c */
+
 char *_strncpy(char *, char *, int);
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
@@ -166,7 +166,7 @@ int is_delim(char, char *);
 int _isalpha(int);
 int _atoi(char *);
 
-/* toem_errors1.c */
+
 int str_to_integer(char *);
 void print_error_message(info_t *, char *);
 int print_integer(int, int);

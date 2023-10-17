@@ -2,12 +2,12 @@
 
 /**
  * _myenv - Display the current environment
- * @info: A structure containing potential arguments.
+ * @threshold: A structure containing potential arguments.
  * Return: Always 0
  */
-int _myenv(info_t *info)
+int _myenv(info_t *threshold)
 {
-	print_environment(info->env);
+	print_list_str(threshold->env);
 	return (0);
 }
 
@@ -18,9 +18,9 @@ int _myenv(info_t *info)
  * Return: The value of the environment variable, or NULL
  * if not found
  */
-char *getenv_value(info_t *info, const char *name)
+char *getenv_value(info_t *threshold, const char *name)
 {
-	list_t *node = info->env;
+	list_t *node = threshold->env;
 	char *value;
 
 	while (node)
@@ -38,32 +38,35 @@ char *getenv_value(info_t *info, const char *name)
  * @info: A structure containing potential arguments.
  * Return: 1 on sucess, 0 on failure
  */
-int mysetenv(info_t *info)
+int mysetenv(info_t *threshold)
 {
-	if (info->argc != 3)
+	if (threshold->argc != 3)
 	{
 		_eputs("incorrect number of arguments.\n");
-		return (0);
+		return (1);
 	}
+	if (_setenv(threshold, threshold->argv[1], threshold->argv[2]))
+		return (0);
+	return (1);
 
 /**
  * myunsetenv - Remove an environment variable.
  * @info: A structure containing potential arguments.
  * Return: 1 on success, 0 on failure.
  */
-int myunsetenv(info_t *info)
+int _myunsetenv(info_t *threshold)
 {
-	int i;
+	int index;
 
-	if (info->argc == 1)
+	if (threshold->argc == 1)
 	{
 		_eputs("Too few arguments.\n");
-		return (0);
+		return (1);
 	}
-	for (i = 1; i <= info->argc; i++)
-		unset_environment_variable(info, info->argv[i]);
+	for (index = 1; index <= threshold->argc; index++)
+		unset_environment_variable(threshold, threshold->argv[index]);
 
-	return (i);
+	return (index);
 }
 
 /**
@@ -71,14 +74,14 @@ int myunsetenv(info_t *info)
  * @info: A structure containing potential arguments.
  * Return: Always 0.
  */
-int initialize_environment(info_t *info)
+int initialize_environment(info_t *threshold)
 {
 	list_t *node = NULL;
-	size_t i;
+	size_t index;
 
-	for (i = 0; environ[i]; i++)
+	for (index = 0; environ[index]; index++)
 
-		add_node_end(&node, new_node, 0);
+		add_node_end(&node, new_node[index], 0);
 	info->env = node;
 
 	return (0);

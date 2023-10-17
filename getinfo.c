@@ -22,9 +22,9 @@ void configure_info(info_t *info, char **arguments)
 
 	info->fname = arguments[0];
 
-	if (info->arg)
+	if (info->arguments)
 	{
-		info->argv = replace_string(info->arg, " \t");
+		info->argv = strtow(info->arg, " \t");
 
 		if (!info->argv)
 		{

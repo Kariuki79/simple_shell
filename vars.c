@@ -1,151 +1,164 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
- * custom_is_chain - test if the current character in the buffer is a chain delimiter
- * @info: The parameter struct
- * @buf: The character buffer
- * @p: Address of the current position in buf
+ * is_chain - test if the current character in the buffer is a chain delimiter
+ * @config: The parameter struct
+ * @buffer: The character buffer
+ * @previous: Address of the current position in buf
  *
  * Return: 1 if it's a chain delimiter, 0 otherwise
  */
-int custom_is_chain(info_t *info, char *buf, size_t *p)
+int is_chain(info_t *config, char *buffer, size_t *previous)
 {
-    size_t j = *p;
+	size_t value = *previous;
 
-    if (buf[j] == '|' && buf[j + 1] == '|')
-    {
-        buf[j] = 0;
-        j++;
-        info->cmd_buf_type = CMD_OR;
-    }
-    else if (buf[j] == '&' && buf[j + 1] == '&')
-    {
-        buf[j] = 0;
-        j++;
-        info->cmd_buf_type = CMD_AND;
-    }
-    else if (buf[j] == ';') /* Found the end of this command */
-    {
-        buf[j] = 0; /* Replace semicolon with null */
-        info->cmd_buf_type = CMD_CHAIN;
-    }
-    else
-        return 0;
-    *p = j;
-    return 1;
+	if (buffer[value] == '|' && buffer[value + 1] == '|')
+	{
+		buffer[value] = 0;
+		value++;
+		config->cmd_buf_type = CMD_OR;
+	}
+
+	else if (buffer[value] == '&' && buffer[value + 1] == '&')
+	{
+		buffer[value] = 0;
+		value++;
+		config->cmd_buf_type = CMD_AND;
+	}
+
+	else if (buffer[value] == ';')
+	{
+		buffer[value] = 0;
+		config->cmd_buf_type = CMD_CHAIN;
+	}
+	else
+		return (0);
+	*previous = value;
+	return (1);
 }
-
 /**
- * custom_check_chain - checks if we should continue chaining based on the last status
- * @info: The parameter struct
- * @buf: The character buffer
- * @p: Address of the current position in buf
- * @i: Starting position in buf
- * @len: Length of buf
+ * check_chain - checks if we should continue chaining
+ * based on the last status
+ *
+ * @config: The parameter struct
+ * @buffer: The character buffer
+ * @prev: Address of the current position in buffer
+ * @index: Starting position in buffer
+ * @length: Length of buffer
  *
  * Return: Void
  */
-void custom_check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
+void check_chain(info_t *config,
+		char *buffer,
+		size_t *prev,
+		size_t index,
+		size_t length)
 {
-    size_t j = *p;
+	size_t value = *prev;
 
-    if (info->cmd_buf_type == CMD_AND)
-    {
-        if (info->status)
-        {
-            buf[i] = 0;
-            j = len;
-        }
-    }
-    if (info->cmd_buf_type == CMD_OR)
-    {
-        if (!info->status)
-        {
-            buf[i] = 0;
-            j = len;
-        }
-    }
+	if (config->cmd_buf_type == CMD_AND)
+	{
+		if (config->status)
+		{
+			buffer[index] = 0;
+			value = length;
+		}
+	}
+	if (config->cmd_buf_type == CMD_OR)
+	{
+		if (!config->status)
+		{
+			buffer[index] = 0;
+			value = length;
+		}
+	}
 
-    *p = j;
+	*prev = value;
 }
 
 /**
- * custom_replace_alias - replaces aliases in the tokenized string
- * @info: The parameter struct
+ * replace_alias - replaces alias in the tokenized string
+ * @config: The parameter struct
  *
  * Return: 1 if replaced, 0 otherwise
  */
-int custom_replace_alias(info_t *info)
+int replace_alias(info_t *config)
 {
-    int i;
-    list_t *node;
-    char *p;
+	int index;
+	list_t *node;
+	char *prev;
 
-    for (i = 0; i < 10; i++)
-    {
-        node = custom_node_starts_with(info->alias, info->argv[0], '=');
-        if (!node)
-            return 0;
-        free(info->argv[0]);
-        p = _strchr(node->str, '=');
-        if (!p)
-            return 0;
-        p = _strdup(p + 1);
-        if (!p)
-            return 0;
-        info->argv[0] = p;
-    }
-    return 1;
+	for (index = 0; index < 10; index++)
+	{
+		node = node_starts_with(config->alias, config->argv[0], '=');
+
+		if (!node)
+			return (0);
+		free(config->argv[0]);
+		prev = _strchr(node->str, '=');
+
+		if (!prev)
+			return (0);
+		prev = _strdup(prev + 1);
+
+		if (!prev)
+			return (0);
+		config->argv[0] = prev;
+	}
+
+	return (1);
 }
 
 /**
- * custom_replace_vars - replaces variables in the tokenized string
- * @info: The parameter struct
+ * replace_vars - replaces variables in the tokenized string
+ * @config: The parameter struct
  *
  * Return: 1 if replaced, 0 otherwise
  */
-int custom_replace_vars(info_t *info)
+int replace_vars(info_t *config)
 {
-    int i = 0;
-    list_t *node;
+	int index = 0;
+	list_t *node;
 
-    for (i = 0; info->argv[i]; i++)
-    {
-        if (info->argv[i][0] != '$' || !info->argv[i][1])
-            continue;
+	for (index = 0; config->argv[index]; index++)
+	{
+		if (config->argv[index][0] != '$' || !config->argv[index][1])
+			continue;
 
-        if (!custom_strcmp(info->argv[i], "$?"))
-        {
-            custom_replace_string(&(info->argv[i]), _strdup(custom_convert_number(info->status, 10, 0)));
-            continue;
-        }
-        if (!custom_strcmp(info->argv[i], "$$"))
-        {
-            custom_replace_string(&(info->argv[i]), _strdup(custom_convert_number(getpid(), 10, 0)));
-            continue;
-        }
-        node = custom_node_starts_with(info->env, &info->argv[i][1], '=');
-        if (node)
-        {
-            custom_replace_string(&(info->argv[i]), _strdup(_strchr(node->str, '=') + 1));
-            continue;
-        }
-        custom_replace_string(&info->argv[i], _strdup(""));
-    }
-    return 0;
+		if (!_strcmp(config->argv[index], "$$?"))
+		{
+			replace_string(&(info->argv[index]),
+					_strdup(convert_number(getpid(), 10, 0)));
+			continue;
+		}
+
+		if (!_strcmp(info->argv[index], "$$"))
+		{
+			replace_string(&(info->argv[index]),
+					_strdup(custom_convert_number(getpid(), 10, 0)));
+			continue;
+	}
+	node = node_starts_with(config->env, &info->argv[index][1], '=');
+	if (node)
+	{
+		replace_string(&(config->argv[index]),
+				_strdup(_strchr(node->str, '=') + 1));
+		continue;
+	}
+	replace_string(&config->argv[index], _strdup(""));
+	}
+	return (0);
 }
-
 /**
  * custom_replace_string - replaces a string
- * @old: Address of the old string
- * @new: New string
+ * @ancient: Address of the old string
+ * @modern: New string
  *
  * Return: 1 if replaced, 0 otherwise
  */
-int custom_replace_string(char **old, char *new)
+int custom_replace_string(char **ancient, char *modern)
 {
-    free(*old);
-    *old = new;
-    return 1;
+	free(*ancient);
+	*ancient = modern;
+	return (1);
 }
-

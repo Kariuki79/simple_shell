@@ -1,78 +1,79 @@
 #include "shell.h"
 /**
- * copy_string - copies part of a source string to a destination string
- * @destination: the string to which the content is copied
- * @source: the string from which content is copied
- * @max_length: the maximum number of characters to copy
- * Returns: a pointer to the destination string
+ * *_strncpy - copies a string
+ * @dest: the destination string to be copied to
+ * @src: the source string
+ * @kimba: the amount of characters to be copied
+ * Return: the concatenated string
  */
-char *copy_string(char *destination, char *source, int max_length)
+char *_strncpy(char *dest, char *src, int kimba)
 {
-	int idx_dest = 0, idx_src = 0;
-	char *result = destination;
+	int index, x;
+	char *s = dest;
 
-	idx_dest = 0;
-	while (source[idx_src] != '\0' && idx_dest < max_length - 1)
+	index = 0;
+
+	while (src[index] != '\0' && index < kimba - 1)
 	{
-		destination[idx_dest] = source[idx_src];
-		idx_dest++;
-		idx_src++;
+		dest[index] = src[index];
+		index++;
 	}
-	if (idx_dest < max_length)
+
+	if (index < kimba)
 	{
-		int j = idx_dest;
-		while (j < max_length)
+		x = index;
+		while (x < kimba)
 		{
-			destination[j] = '\0';
-			j++;
+			dest[x] = '\0';
+			x++;
 		}
 	}
-	return result;
+	return (s);
 }
 
 /**
- * concatenate_strings - concatenates two strings up to a specified maximum length
- * @dest_string: the first string (base) to which the second string is appended
- * @src_string: the second string to be appended
- * @max_length: the maximum number of characters to append
- * Returns: a pointer to the concatenated string
+ * *_strncat - concatenates two strings
+ * @dest: the first string
+ * @src: the second string
+ * @kimba: the amount of bytes to be maximally used
+ * Return: the concatenated string
  */
-char *concatenate_strings(char *dest_string, char *src_string, int max_length)
+char *_strncat(char *dest, char *src, int kimba)
 {
-	int idx_dest = 0, idx_src = 0;
-	char *result = dest_string;
+	int index, x;
+	char *s = dest;
 
-	idx_dest = 0;
-	idx_src = 0;
+	index = 0;
+	x = 0;
 
-	while (dest_string[idx_dest] != '\0')
-		idx_dest++;
+	while (dest[index] != '\0')
+		index++;
 
-	while (src_string[idx_src] != '\0' && idx_src < max_length)
+	while (src[x] != '\0' && x < kimba)
 	{
-		dest_string[idx_dest] = src_string[idx_src];
-		idx_dest++;
-		idx_src++;
+		dest[index] = src[x];
+		index++;
+		x++;
 	}
-	if (idx_src < max_length)
-		dest_string[idx_dest] = '\0';
-	return (result);
+	if (x < index)
+		dest[index] = '\0';
+	return (s);
 }
 
 /**
- * find_character - searches for a character within a string
- * @input_string: the string to be searched
- * @target_char: the character to be located
- * Returns: a pointer to the first occurrence of the target character in the input string, or NULL if not found
+ * *_strchr - locates a character in a string
+ * @size: the string to be parsed
+ * @count: the character to look for
+ * Return: (size) a pointer to the memory area s
  */
-char *find_character(char *input_string, char target_char)
+char *_strchr(char *size, char count)
 {
-	do
-	{
-		if (*input_string == target_char)
-			return input_string;
+	do {
+		if (*size == count)
+			return (size);
 	}
-	while (*input_string++ != '\0');
+
+	while (*size++ != '\0');
+
 	return (NULL);
 }
-
