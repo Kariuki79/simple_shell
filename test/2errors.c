@@ -1,4 +1,3 @@
-
 #include "shell.h"
 /**
  * str_to_integer - converts a string to an integer
@@ -18,15 +17,15 @@ int str_to_integer(char *str)
 	{
 		if (str[index] >= '0' && str[index] <= '9')
 		{
-		    result *= 10;
-		    result += (str[index] - '0');
+			result *= 10;
+			result += (str[index] - '0');
 
-		    if (result > INT_MAX)
-			return (-1);
+			if (result > INT_MAX)
+				return (-1);
 	}
 
 		else
-		    return (-1);
+			return (-1);
 	}
 	return (result);
 }
@@ -40,13 +39,12 @@ int str_to_integer(char *str)
  */
 void print_error_message(info_t *info, char *error_string)
 {
-	eputs(info->fname);
+	_eputs(info->fname);
+	_eputs(": ");	print_integer(info->line_number, STDERR_FILENO);
+	_eputs(": ");
+	_eputs(info->argv[0]);
 	eputs(": ");
-	print_integer(info->line_number, STDERR_FILENO);
-	eputs(": ");
-	eputs(info->argv[0]);
-	eputs(": ");
-	eputs(error_string);
+	_puts(error_string);
 }
 
 /**
@@ -58,7 +56,7 @@ void print_error_message(info_t *info, char *error_string)
 int print_integer(int number, int fd)
 {
 	int (*write_character)(char) = putfd;
-	int i, count = 0;
+	int index, count = 0;
 	unsigned int absolute_value, current;
 
 	if (fd == STDERR_FILENO)
