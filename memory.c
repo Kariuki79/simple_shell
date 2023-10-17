@@ -10,7 +10,7 @@ int custom_bfree(void **ptr)
 {
     if (ptr && *ptr)
     {
-        custom_free(*ptr);
+        custom_bfree(*ptr);
         *ptr = NULL;
         return 1;
     }
