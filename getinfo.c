@@ -5,10 +5,10 @@
  */
 void initialize_info(info_t *info)
 {
-	info->arguments = NULL;
-	info->argument_vector = NULL;
+	info->arg = NULL;
+	info->argv = NULL;
 	info->path = NULL;
-	info->argument_count = 0;
+	info->argc = 0;
 }
 
 /**
@@ -20,26 +20,26 @@ void configure_info(info_t *info, char **arguments)
 {
 	int index = 0;
 
-	info->program_name = arguments[0];
+	info->fname = arguments[0];
 
-	if (info->arguments)
+	if (info->arg)
 	{
-		info->argument_vector = split_string(info->arguments, " \t");
+		info->argv = replace_string(info->arg, " \t");
 
-		if (!info->argument_vector)
+		if (!info->argv)
 		{
-			info->argument_vector = malloc(sizeof(char *) * 2);
-			if (info->argument_vector)
+			info->argv = malloc(sizeof(char *) * 2);
+			if (info->argv)
 			{
-				info->argument_vector[0] = duplicate_string(info->arguments);
-				info->argument_vector[1] = NULL;
+				info->argv[0] = duplicate_string(info->arguments);
+				info->argv[1] = NULL;
 			}
 		}
-		for (index = 0; info->argument_vector && info->argument_vector[index]; index++)
+		for (index = 0; info->argv && info->argv[index]; index++)
 			;
-		info->argument_count = index;
-		replace_aliases(info);
-		replace_variables(info);
+		info->argc = index;
+		replace_alias(info);
+		replace_vars(info);
 	}
 }
 
@@ -50,29 +50,29 @@ void configure_info(info_t *info, char **arguments)
  */
 void deallocate_info(info_t *info, int release_all)
 {
-	free_string_array(info->argument_vector);
-	info->argument_vector = NULLz;
+	ffree(info->argv);
+	info->argv = NULL;
 	info->path = NULL;
 
 	if (release_all)
 	{
-		if (!info->command_buffer)
-			free(info->arguments);
+		if (!info->cmd_buf)
+			free(info->arg);
 
-		if (info->environment)
-			free_list(&(info->environment));
+		if (info->environ)
+			free_list(&(info->environ));
 
 		if (info->history)
 			free_list(&(info->history));
 
-		if (info->aliases)
-			free_list(&(info->aliases));
+		if (info->alias)
+			free_list(&(info->alias));
 		free_string_array(info->environment_variables);
-		info->environment_variables = NULL;
-		batch_free((void **)info->command_buffer);
+		info->environ = NULL;
+		bfree((void **)info->cmd_buf);
 
 		if (info->read_file_descriptor > 2)
-			close(info->read_file_descriptor);
+			close(info->readfd);
 		write(2, BUF_FLUSH, 1);
 	}
 }

@@ -126,10 +126,10 @@ char *find_path(info_t *, char *, char *);
 int loophsh(char **);
 
 /* toem_errors.c */
-void _eputs(char *);
-int _eputchar(char);
-int _putfd(char c, int fd);
-int _putsfd(char *str, int fd);
+void eputs(char *);
+int eputchar(char);
+int putfd(char c, int fd);
+int putsfd(char *str, int fd);
 
 /* toem_string.c */
 int _strlen(char *);
@@ -188,16 +188,16 @@ int _getline(info_t *, char **, size_t *);
 void sigintHandler(int);
 
 /* toem_getinfo.c */
-void clear_info(info_t *);
-void set_info(info_t *, char **);
-void free_info(info_t *, int);
+void initialize_info(info_t *);
+void configure_info(info_t *, char **);
+void deallocate_info(info_t *, int);
 
 /* toem_environ.c */
-char *_getenv(info_t *, const char *);
+char *_getenv_value(info_t *, const char *);
 int _myenv(info_t *);
 int _mysetenv(info_t *);
 int _myunsetenv(info_t *);
-int populate_env_list(info_t *);
+int initialize_environment(info_t *);
 
 /* toem_getenv.c */
 char **get_environ(info_t *);

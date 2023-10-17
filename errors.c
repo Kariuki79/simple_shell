@@ -26,14 +26,14 @@ void eputs(char *str)
 int eputchar(char c)
 {
 	static int m;
-	static char buffer[WRITE_BUFFER_SIZE];
+	static char buffer[WRITE_BUF_SIZE];
 
-	if (c == BUFFER_FLUSH || i >= WRITE_BUFFER_SIZE)
+	if (c == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
 		write(2, buffer, m);
 		m = 0;
 	}
-	if (c != BUFFER_FLUSH)
+	if (c != BUF_FLUSH)
 		buffer[m++] = c;
 	return (1);
 }
@@ -48,14 +48,14 @@ int eputchar(char c)
 int putfd(char c, int fd)
 {
 	static int m;
-	static char buffer[WRITE_BUFFER_SIZE];
+	static char buffer[WRITE_BUF_SIZE];
 
-	if (c == BUFFER_FLUSH || m >= WRITE_BUFFER_SIZE)
+	if (c == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
 		write(fd, buffer, m);
 		m = 0;
 	}
-	if (c != BUFFER_FLUSH)
+	if (c != BUF_FLUSH)
 		buffer[m++] = c;
 	return (1);
 }
@@ -77,4 +77,4 @@ int putsfd(char *str, int fd)
 		m += putfd(*str++, fd);
 	}
 	return (m);
-
+}
