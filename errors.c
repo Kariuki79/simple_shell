@@ -1,5 +1,5 @@
 #include "shell.h"
-/***
+/**
  * eputs - prints a string to stderr
  * @str: the string to be printed
  */
@@ -20,7 +20,7 @@ void eputs(char *str)
 /**
  * eputchar - writes a character to stderr
  * @c: the character to print
- * @return: On success, 1 is returned. On error, -1 is returned,
+ * Return: On success, 1 is returned. On error, -1 is returned,
  * and errno is set appropriately.
  */
 int eputchar(char c)
@@ -42,7 +42,7 @@ int eputchar(char c)
  * putfd - writes a character to a given file descriptor
  * @c: The character to print
  * @fd: The file descriptor to write to
- * @return: On success, 1 is returned. On error, -1 is returned,
+ * Return: On success, 1 is returned. On error, -1 is returned,
  * and errno is set appropriately.
  */
 int putfd(char c, int fd)
@@ -64,7 +64,7 @@ int putfd(char c, int fd)
  * putsfd - prints a string to a specified file descriptor
  * @str: the string to be printed
  * @fd: the file descriptor to write to
- * @return: the number of characters written
+ * Return: the number of characters written
  */
 int putsfd(char *str, int fd)
 {
