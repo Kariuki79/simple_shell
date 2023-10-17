@@ -1,5 +1,5 @@
 #include "shell.h"
-/***
+/**
  * eputs - prints a string to stderr
  * @str: the string to be printed
  */
@@ -20,20 +20,20 @@ void eputs(char *str)
 /**
  * eputchar - writes a character to stderr
  * @c: the character to print
- * @return: On success, 1 is returned. On error, -1 is returned,
+ * Return: On success, 1 is returned. On error, -1 is returned,
  * and errno is set appropriately.
  */
 int eputchar(char c)
 {
 	static int m;
-	static char buffer[WRITE_BUFFER_SIZE];
+	static char buffer[WRITE_BUF_SIZE];
 
-	if (c == BUFFER_FLUSH || i >= WRITE_BUFFER_SIZE)
+	if (c == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
 		write(2, buffer, m);
 		m = 0;
 	}
-	if (c != BUFFER_FLUSH)
+	if (c != BUF_FLUSH)
 		buffer[m++] = c;
 	return (1);
 }
@@ -42,20 +42,20 @@ int eputchar(char c)
  * putfd - writes a character to a given file descriptor
  * @c: The character to print
  * @fd: The file descriptor to write to
- * @return: On success, 1 is returned. On error, -1 is returned,
+ * Return: On success, 1 is returned. On error, -1 is returned,
  * and errno is set appropriately.
  */
 int putfd(char c, int fd)
 {
 	static int m;
-	static char buffer[WRITE_BUFFER_SIZE];
+	static char buffer[WRITE_BUF_SIZE];
 
-	if (c == BUFFER_FLUSH || m >= WRITE_BUFFER_SIZE)
+	if (c == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
 		write(fd, buffer, m);
 		m = 0;
 	}
-	if (c != BUFFER_FLUSH)
+	if (c != BUF_FLUSH)
 		buffer[m++] = c;
 	return (1);
 }
@@ -64,7 +64,7 @@ int putfd(char c, int fd)
  * putsfd - prints a string to a specified file descriptor
  * @str: the string to be printed
  * @fd: the file descriptor to write to
- * @return: the number of characters written
+ * Return: the number of characters written
  */
 int putsfd(char *str, int fd)
 {
