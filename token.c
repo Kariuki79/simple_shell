@@ -1,6 +1,7 @@
-#include "custom_shell.h"
+#include "shell.h"
 /**
- * custom_split_string - splits a string into words. Repeat delimiters are ignored
+ * custom_split_string - splits a string into words.
+ * Repeat delimiters are ignored
  * @str: The input string
  * @delimiter: The delimiter string
  *
@@ -13,24 +14,25 @@ char **custom_split_string(char *str, char *delimiter)
 	char **result;
 
 	if (str == NULL || str[0] == 0)
-		return NULL;
+		return (NULL);
 
 	if (!delimiter)
 		delimiter = " ";
 
 	for (i = 0; str[i] != '\0'; i++)
 	{
-		if (!is_delimiter(str[i], delimiter) && (is_delimiter(str[i + 1], delimiter) || !str[i + 1]))
+		if (!is_delimiter(str[i], delimiter) && (is_delimiter(str[i + 1],
+						delimiter) || !str[i + 1]))
 			numWords++;
 	}
 
 	if (numWords == 0)
-		return NULL;
+		return (NULL);
 
 	result = malloc((1 + numWords) * sizeof(char *));
 
 	if (!result)
-		return NULL;
+		return (NULL);
 
 	for (i = 0, j = 0; j < numWords; j++)
 	{
@@ -48,7 +50,7 @@ char **custom_split_string(char *str, char *delimiter)
 			for (k = 0; k < j; k++)
 				free(result[k]);
 			free(result);
-			return NULL;
+			return (NULL);
 		}
 
 		for (m = 0; m < k; m++)
@@ -73,17 +75,18 @@ char **custom_split_string2(char *str, char delimiter)
 	char **result;
 
 	if (str == NULL || str[0] == 0)
-		return NULL;
+		return (NULL);
 
 	for (i = 0; str[i] != '\0'; i++)
 	{
 		if ((str[i] != delimiter && str[i + 1] == delimiter) ||
-				(str[i] != delimiter && !str[i + 1]) || str[i + 1] == delimiter)
-			numWords++
+				(str[i] != delimiter && !str[i + 1]) ||
+				str[i + 1] == delimiter)
+			numWords++;
 	}
 
 	if (numWords == 0)
-		return NULL;
+		return (NULL);
 
 	result = malloc((1 + numWords) * sizeof(char *));
 	if (!result)
@@ -95,7 +98,8 @@ char **custom_split_string2(char *str, char delimiter)
 			i++;
 		k = 0;
 
-		while (str[i + k] != delimiter && str[i + k] && str[i + k] != delimiter)
+		while (str[i + k] != delimiter && str[i + k] && str[i + k] !=
+				delimiter)
 			k++;
 		result[j] = malloc((k + 1) * sizeof(char));
 
@@ -104,7 +108,7 @@ char **custom_split_string2(char *str, char delimiter)
 			for (k = 0; k < j; k++)
 				free(result[k]);
 			free(result);
-			return NULL;
+			return (NULL);
 		}
 
 		for (m = 0; m < k; m++)
