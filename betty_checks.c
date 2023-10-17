@@ -52,9 +52,9 @@ int _isalpha(int c)
  *
  * Return: 0 if zero numbers in the string, if otherwise converted number
  */
-int _atoi(char *s)i
+int _atoi(char *s)
 {
-	int i, sign = 1, flag = 0;
+	int i, sign = 1, flag = 0, output;
 
 	output = 0;
 
@@ -74,4 +74,4 @@ int _atoi(char *s)i
 if (sign == 1)
 	return (-output);
 return (output);
-	}
+}

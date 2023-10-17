@@ -64,7 +64,7 @@ void custom_print_string(char *str)
 		return;
 	while (str[index] != '\0')
 	{
-		custom_put_character(str[i]);
+		custom_put_character(str[index]);
 		index++;
 	}
 }
@@ -79,15 +79,15 @@ void custom_print_string(char *str)
 int custom_put_character(char c)
 {
 	static int index;
-	static char buffer[WRITE_BUFFER_SIZE];
+	static char buffer[WRITE_BUF_SIZE];
 
-	if (c == BUFFER_FLUSH || index >= WRITE_BUFFER_SIZE)
+	if (c == BUF_FLUSH || index >= WRITE_BUF_SIZE)
 	{
 		write(1, buffer, index);
 		index = 0;
 	}
 
-	if (c != BUFFER_FLUSH)
+	if (c != BUF_FLUSH)
 		buffer[index++] = c;
 
 	return (1);

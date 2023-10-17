@@ -77,4 +77,4 @@ int putsfd(char *str, int fd)
 		m += putfd(*str++, fd);
 	}
 	return (m);
-}
+

@@ -138,10 +138,10 @@ char *starts_with(const char *, const char *);
 char *_strcat(char *, char *);
 
 /* toem_string1.c */
-char *_strcpy(char *, char *);
-char *_strdup(const char *);
-void _puts(char *);
-int _putchar(char);
+char *custom_copy_string(char *, char *);
+char *custom_duplicate_string(const char *);
+void custom_print_string(char *);
+int custom_put_character(char);
 
 /* toem_exits.c */
 char *_strncpy(char *, char *, int);
@@ -167,11 +167,11 @@ int _isalpha(int);
 int _atoi(char *);
 
 /* toem_errors1.c */
-int _erratoi(char *);
-void print_error(info_t *, char *);
-int print_d(int, int);
-char *convert_number(long int, int, int);
-void remove_comments(char *);
+int str_to_integer(char *);
+void print_error_message(info_t *, char *);
+int print_integer(int, int);
+char *integer_to_string(long int, int, int);
+void remove_hash_comments(char *);
 
 /* toem_builtin.c */
 int _myexit(info_t *);

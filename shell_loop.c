@@ -1,80 +1,84 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
  * custom_hsh - main shell loop
  * @info: The parameter & return info struct
  * @av: The argument vector from main()
  *
+ * 
  * Return: 0 on success, 1 on error, or error code
  */
 int custom_hsh(info_t *info, char **av)
 {
-    ssize_t r = 0;
-    int custom_builtin_ret = 0;
+	ssize_t r = 0;
+	int custom_builtin_ret = 0;
 
-    while (r != -1 && custom_builtin_ret != -2)
-    {
-        custom_clear_info(info);
-        if (custom_interactive(info))
-            custom_puts("$ ");
-        custom_eputchar(BUF_FLUSH);
-        r = custom_get_input(info);
-        if (r != -1)
-        {
-            custom_set_info(info, av);
-            custom_builtin_ret = custom_find_builtin(info);
-            if (custom_builtin_ret == -1)
-                custom_find_cmd(info);
-        }
-        else if (custom_interactive(info))
-            custom_putchar('\n');
-        custom_free_info(info, 0);
-    }
-    custom_write_history(info);
-    custom_free_info(info, 1);
-    if (!custom_interactive(info) && info->status)
-        exit(info->status);
-    if (custom_builtin_ret == -2)
-    {
-        if (info->err_num == -1)
-            exit(info->status);
-        exit(info->err_num);
-    }
-    return (custom_builtin_ret);
+	while (r != -1 && custom_builtin_ret != -2)
+	{
+		custom_clear_info(info);
+
+		if (custom_interactive(info))
+			custom_puts("$ ");
+		custom_eputchar(BUF_FLUSH);
+		r = custom_get_input(info);
+
+		if (r != -1)
+		{
+			custom_set_info(info, av);
+			custom_builtin_ret = custom_find_builtin(info);
+
+			if (custom_builtin_ret == -1)
+				custom_find_cmd(info);
+		}
+		else if (custom_interactive(info))
+			custom_putchar('\n');
+		custom_free_info(info, 0);
+	}
+	custom_write_history(info);
+	custom_free_info(info, 1);
+
+	if (!custom_interactive(info) && info->status)
+		exit(info->status);
+
+	if (custom_builtin_ret == -2)
+	{
+		if (info->err_num == -1)
+			exit(info->status);
+		exit(info->err_num);
+	}
+	return (custom_builtin_ret);
 }
-
 /**
  * custom_find_builtin - finds a builtin command
  * @info: The parameter & return info struct
- *
  * Return: -1 if builtin not found,
- *         0 if builtin executed successfully,
- *         1 if builtin found but not successful,
- *         -2 if builtin signals exit()
+ * 		0 if builtin executed successfully,
+ * 		1 if builtin found but not successful,
+ * 		-2 if builtin signals exit()
  */
 int custom_find_builtin(info_t *info)
 {
-    int i, custom_builtin_ret = -1;
-    custom_builtin_table custom_builtintbl[] = {
-        {"exit", custom_myexit},
-        {"env", custom_myenv},
-        {"help", custom_myhelp},
-        {"history", custom_myhistory},
-        {"setenv", custom_mysetenv},
-        {"unsetenv", custom_myunsetenv},
-        {"cd", custom_mycd},
-        {"alias", custom_myalias},
-        {NULL, NULL}
-    };
+	int i, custom_builtin_ret = -1;
+	custom_builtin_table custom_builtintbl[] = {
+		{"exit", custom_myexit},
+		{"env", custom_myenv},
+		{"help", custom_myhelp},
+		{"history", custom_myhistory},
+		{"setenv", custom_mysetenv},
+		{"unsetenv", custom_myunsetenv},
+		{"cd", custom_mycd},
+		{"alias", custom_myalias},
+		{NULL, NULL}
+	};
 
-    for (i = 0; custom_builtintbl[i].type; i++)
-        if (custom_strcmp(info->argv[0], custom_builtintbl[i].type) == 0)
-        {
-            info->line_count++;
-            custom_builtin_ret = custom_builtintbl[i].func(info);
-            break;
-        }
-    return custom_builtin_ret;
+	for (i = 0; custom_builtintbl[i].type; i++)
+		if (custom_strcmp(info->argv[0], custom_builtintbl[i].type) == 0)
+		{
+			info->line_count++;
+			custom_builtin_ret = custom_builtintbl[i].func(info);
+			break;
+		}
+	return custom_builtin_ret;
 }
 
 /**
