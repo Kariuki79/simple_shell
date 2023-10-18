@@ -23,7 +23,6 @@ void handle_command(char *buffer)
 
 	if (access(args[0], X_OK) == 0)
 	{
-
 		if (fork() == 0)
 		{
 			if (execve(args[0], args, NULL) == -1)
