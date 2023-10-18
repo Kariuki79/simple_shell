@@ -110,6 +110,8 @@ typedef struct builtin
 	int (*func)(info_t *);
 } builtin_table;
 
+/* main.c */
+void populate_env_list(info_t *info);
 
 /* toem_shloop.c */
 int hsh(info_t *, char **);

@@ -1,4 +1,4 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
  * custom_bfree - frees a pointer and sets it to NULL
@@ -10,7 +10,7 @@ int custom_bfree(void **ptr)
 {
     if (ptr && *ptr)
     {
-        custom_free(*ptr);
+        custom_bfree(*ptr);
         *ptr = NULL;
         return 1;
     }
