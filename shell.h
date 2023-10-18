@@ -12,6 +12,10 @@
 #include <fcntl.h>
 #include <errno.h>
 
+/* declaring environ in 2-handle file */
+extern char **environ;
+
 void handle_command(char *buffer);
+int find_executable_in_path(const char *command, char *full_path, size_t max_length);
 
 #endif

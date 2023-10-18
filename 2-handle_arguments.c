@@ -10,6 +10,7 @@ void handle_command(char *buffer)
 	char *token;
 	char *args[100];
 	int arg_count = 0;
+	char full_path[256];
 
 	token = strtok(buffer, " ");
 	while (token != NULL)
@@ -21,11 +22,11 @@ void handle_command(char *buffer)
 
 	args[arg_count] = NULL;
 
-	if (access(args[0], X_OK) == 0)
+	if (find_executable_in_path(args[0], full_path, sizeof(full_path)))
 	{
 		if (fork() == 0)
 		{
-			if (execve(args[0], args, NULL) == -1)
+			if (execve(full_path, args, NULL) == -1)
 			{
 				perror("Error");
 				exit(EXIT_FAILURE);
