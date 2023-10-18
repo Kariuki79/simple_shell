@@ -1,165 +1,167 @@
 #include "shell.h"
 
 /**
- * custom_hsh - main shell loop
- * @info: The parameter & return info struct
- * @av: The argument vector from main()
+ * hsh - The main shell loop
+ * @config: the parameter and return info struct
+ * @value: the argument vector from main()
  *
- * 
- * Return: 0 on success, 1 on error, or error code
+ * Return: 0 on success, 1 on error, or an error in code
  */
-int custom_hsh(info_t *info, char **av)
+int hsh(info_t *config, char **value)
 {
-	ssize_t r = 0;
-	int custom_builtin_ret = 0;
+	ssize_t iterator = 0;
+	int builtin_ret = 0;
 
-	while (r != -1 && custom_builtin_ret != -2)
+	while (iterator != -1 && builtin_ret != -2)
 	{
-		custom_clear_info(info);
+		clear_info(config);
 
-		if (custom_interactive(info))
-			custom_puts("$ ");
-		custom_eputchar(BUF_FLUSH);
-		r = custom_get_input(info);
+		if (interactive(config))
+			_puts("$ ");
+		_eputchar(BUF_FLUSH);
+		iterator = get_input(config);
 
-		if (r != -1)
+		if (iterator != -1)
 		{
-			custom_set_info(info, av);
-			custom_builtin_ret = custom_find_builtin(info);
-
-			if (custom_builtin_ret == -1)
-				custom_find_cmd(info);
+			set_info(config, value);
+			builtin_ret = find_builtin(config);
+			if (builtin_ret == -1)
+				find_cmd(config);
 		}
-		else if (custom_interactive(info))
-			custom_putchar('\n');
-		custom_free_info(info, 0);
+
+		else if (interactive(config))
+			_putchar('\n');
+		free_info(config, 0);
 	}
-	custom_write_history(info);
-	custom_free_info(info, 1);
 
-	if (!custom_interactive(info) && info->status)
-		exit(info->status);
+	write_history(config);
+	free_info(config, 1);
 
-	if (custom_builtin_ret == -2)
+	if (!interactive(config) && config->status)
+		exit(config->status);
+
+	if (builtin_ret == -2)
 	{
-		if (info->err_num == -1)
-			exit(info->status);
-		exit(info->err_num);
+		if (config->err_num == -1)
+			exit(config->status);
+		exit(config->err_num);
 	}
-	return (custom_builtin_ret);
+
+	return (builtin_ret);
 }
+
 /**
- * custom_find_builtin - finds a builtin command
- * @info: The parameter & return info struct
+ * find_builtin - searches for a builtin command
+ * @config: the parameter & return config struct
  * Return: -1 if builtin not found,
- * 		0 if builtin executed successfully,
- * 		1 if builtin found but not successful,
- * 		-2 if builtin signals exit()
+ * 0 if builtin executed successfully,
+ * 1 if builtin found but not successful,
+ * -2 if builtin signals exit()
  */
-int custom_find_builtin(info_t *info)
+int find_builtin(info_t *config)
 {
-	int i, custom_builtin_ret = -1;
-	custom_builtin_table custom_builtintbl[] = {
-		{"exit", custom_myexit},
-		{"env", custom_myenv},
-		{"help", custom_myhelp},
-		{"history", custom_myhistory},
-		{"setenv", custom_mysetenv},
-		{"unsetenv", custom_myunsetenv},
-		{"cd", custom_mycd},
-		{"alias", custom_myalias},
+	int index, built_in_ret = -1;
+	builtin_table builtintbl[] =
+	{
+		{"exit", _myexit},
+		{"env", _myenv},
+		{"help", _myhelp},
+		{"history", _myhistory},
+		{"setenv", _mysetenv},
+		{"unsetenv", _myunsetenv},
+		{"cd", _mycd},
+		{"alias", _myalias},
 		{NULL, NULL}
 	};
 
-	for (i = 0; custom_builtintbl[i].type; i++)
-		if (custom_strcmp(info->argv[0], custom_builtintbl[i].type) == 0)
+	for (index = 0; builtintbl[index].type; index++)
+		if (_strcmp(info->argv[0], builtintbl[index].type) == 0)
 		{
 			info->line_count++;
-			custom_builtin_ret = custom_builtintbl[i].func(info);
+			built_in_ret = builtintbl[index].func(config);
 			break;
 		}
-	return custom_builtin_ret;
+	return (built_in_ret);
 }
 
 /**
- * custom_find_cmd - finds a command in PATH
- * @info: The parameter & return info struct
+ * find_cmd - searches for a command in PATH
+ * @config: the parameter & return info struct
  *
  * Return: void
  */
-void custom_find_cmd(info_t *info)
+void find_cmd(info_t *config)
 {
-    char *path = NULL;
-    int i, k;
+	char *path = NULL;
+	int index, key;
 
-    info->path = info->argv[0];
-    if (info->linecount_flag == 1)
-    {
-        info->line_count++;
-        info->linecount_flag = 0;
-    }
-    for (i = 0, k = 0; info->arg[i]; i++)
-        if (!custom_is_delim(info->arg[i], " \t\n"))
-            k++;
-    if (!k)
-        return;
+	info->path = info->argv[0];
+	if (info->linecount_flag == 1)
+	{
+		info->line_count++;
+		info->linecount_flag = 0;
+	}
 
-    path = custom_find_path(info, custom_getenv(info, "PATH="), info->argv[0]);
-    if (path)
-    {
-        info->path = path;
-        custom_fork_cmd(info);
-    }
-    else
-    {
-        if ((custom_interactive(info) || custom_getenv(info, "PATH=")
-            || info->argv[0][0] == '/') && custom_is_cmd(info, info->argv[0]))
-            custom_fork_cmd(info);
-        else if (*(info->arg) != '\n')
-        {
-            info->status = 127;
-            custom_print_error(info, "not found\n");
-        }
-    }
+	for (index = 0, key = 0; config->arg[index]; index++)
+		if (!is_delim(config->arg[index], " \t\n"))
+			key++;
+	if (!key)
+		return;
+
+	path = find_path(config, _getenv(config, "PATH="), config->argv[0]);
+
+	if (path)
+	{
+		config->path = path;
+		fork_cmd(config);
+	}
+	else
+	{
+		if ((interactive(config) || _getenv(info, "PATH=")
+					|| config->argv[0][0] == '/') && is_cmd(config, config->argv[0]))
+			fork_cmd(config);
+		else if (*(config->arg) != '\n')
+		{
+			config->status = 127;
+			print_error(config, "not found\n");
+		}
+	}
 }
 
 /**
- * custom_fork_cmd - forks an exec thread to run cmd
- * @info: The parameter & return info struct
+ * fork_cmd - forks out an exec thread to run cmd
+ * @config: the parameter & return info struct
  *
  * Return: void
  */
-void custom_fork_cmd(info_t *info)
+void fork_cmd(info_t *config)
 {
-    pid_t child_pid;
+	pid_t child_pid;
 
-    child_pid = fork();
-    if (child_pid == -1)
-    {
-        /* TODO: PUT ERROR FUNCTION */
-        perror("Error:");
-        return;
-    }
-    if (child_pid == 0)
-    {
-        if (execve(info->path, info->argv, custom_get_environ(info)) == -1)
-        {
-            custom_free_info(info, 1);
-            if (errno == EACCES)
-                exit(126);
-            exit(1);
-        }
-        /* TODO: PUT ERROR FUNCTION */
-    }
-    else
-    {
-        wait(&(info->status));
-        if (WIFEXITED(info->status))
-        {
-            info->status = WEXITSTATUS(info->status);
-            if (info->status == 126)
-                custom_print_error(info, "Permission denied\n");
-        }
-    }
+	child_pid = fork();
+	if (child_pid == -1)
+	{
+
+	}
+
+	if (child_pid == 0)
+	{
+		if (execve(config->path, config->argv, get_environ(config)) == -1)
+		{
+			free_info(config, 1);
+			if (errno == EACCES)
+				exit(126);
+			exit(1);
+		}
+	}
+	else
+	{
+		wait(&(info->status));
+		if (WIFEXITED(info->status))
+		{
+			config->status = WEXITSTATUS(config->status);
+			if (config->status == 126)
+				print_error(config, "Permission denied\n");
+		}
+	}
 }
-
