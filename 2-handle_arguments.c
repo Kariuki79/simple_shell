@@ -28,7 +28,7 @@ void handle_command(char *buffer)
 		{
 			if (execve(args[0], args, NULL) == -1)
 			{
-				perror(args[0]);
+				perror("Error");
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -36,5 +36,9 @@ void handle_command(char *buffer)
 		{
 			wait(NULL);
 		}
+	}
+	else
+	{
+		fprintf(stderr, "%s: command not found\n", args[0]);
 	}
 }
