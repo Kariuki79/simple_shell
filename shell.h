@@ -12,12 +12,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
-/* For 2-handle_arguments */
-void handle_command(char *buffer);
-
-/* declaring environ in 2-handle file */
-extern char **environ;
-int find_executable_in_path(const char *command, char *full_path, size_t max_length);
 /* for read/write buffers */
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
@@ -237,23 +231,5 @@ void check_chain(info_t *, char *, size_t *, size_t, size_t);
 int replace_alias(info_t *);
 int replace_vars(info_t *);
 int replace_string(char **, char *);
-
-/* toem_realloc.c */
-char *_memset(char *, char, unsigned int);
-void ffree(char **);
-void *_realloc(void *, unsigned int, unsigned int);
-
-/* toem_memory.c */
-int bfree(void **);
-
-/* toem_getinfo.c */
-void initialize_info(info_t *);
-void configure_info(info_t *, char **);
-void deallocate_info(info_t *, int);
-
-/* toem_parser.c */
-int is_cmd(info_t *, char *);
-char *dup_chars(char *, int, int);
-char *find_path(info_t *, char *, char *);
 
 #endif
