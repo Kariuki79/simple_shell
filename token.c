@@ -34,20 +34,20 @@ char **strtow(char *string, char *delimiter)
 		key = 0;
 		while (!is_delim(string[index + key], delimiter) && string[index + key])
 			key++;
-		s[array] = malloc((key + 1) * sizeof(char));
-		if (!s[array])
+		source[array] = malloc((key + 1) * sizeof(char));
+		if (!string[array])
 		{
 			for (key = 0; key < array; key++)
-				free(s[key]);
-			free(s);
+				free(source[key]);
+			free(source);
 			return (NULL);
 		}
 		for (m = 0; m < key; m++)
-			s[array][m] = string[index++];
-		s[array][m] = 0;
+			source[array][m] = string[index++];
+		source[array][m] = 0;
 	}
-	s[array] = NULL;
-	return (s);
+	source[array] = NULL;
+	return (source);
 }
 
 /**
@@ -63,7 +63,7 @@ char **strtow2(char *string, char delimiter)
 
 	if (string == NULL || string[0] == 0)
 		return (NULL);
-	for (index = 0; str[index] != '\0'; index++)
+	for (index = 0; string[index] != '\0'; index++)
 		if ((string[index] != delimiter && string[index + 1] == delimiter) ||
 		    (string[index] != delimiter && !string[index + 1]) || string[index + 1] == delimiter)
 			numwords++;
@@ -76,13 +76,13 @@ char **strtow2(char *string, char delimiter)
 	{
 		while (string[index] == delimiter && string[index] != delimiter)
 			index++;
-		k = 0;
+		key = 0;
 		while (string[index + key] != delimiter && string[index + key] && string[index + key] != delimiter)
 			key++;
 		s[array] = malloc((key + 1) * sizeof(char));
 		if (!s[array])
 		{
-			for (key = 0; k < array; key++)
+			for (key = 0; key < array; key++)
 				free(s[key]);
 			free(s);
 			return (NULL);
