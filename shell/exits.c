@@ -1,5 +1,4 @@
 #include "shell.h"
-<<<<<<< HEAD
 
 /**
  **_strncpy - copies a string
@@ -27,6 +26,7 @@ char *_strncpy(char *dexterity, char *source_code, int config)
 			dexterity[array] = '\0';
 			array++;
 =======
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
 /**
  * *_strncpy - copies a string
  * @dest: the destination string to be copied to
@@ -54,13 +54,18 @@ char *_strncpy(char *dest, char *src, int kimba)
 		{
 			dest[x] = '\0';
 			x++;
+<<<<<<< HEAD
+=======
 >>>>>>> 84ddf4ff1ea3706a2021dfea8bb16be8aac57619
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
 		}
 	}
 	return (s);
 }
 
 /**
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
  **_strncat - concatenates two strings
  *@dexterity: the first string
@@ -86,6 +91,7 @@ char *_strncat(char *dexterity, char *source_code, int config)
 	if (array < config)
 		dexterity[index] = '\0';
 =======
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
  * *_strncat - concatenates two strings
  * @dest: the first string
  * @src: the second string
@@ -111,11 +117,16 @@ char *_strncat(char *dest, char *src, int kimba)
 	}
 	if (x < index)
 		dest[index] = '\0';
+<<<<<<< HEAD
+=======
 >>>>>>> 84ddf4ff1ea3706a2021dfea8bb16be8aac57619
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
 	return (s);
 }
 
 /**
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
  **_strchr - locates a character in a string
  *@string: the string to be parsed
@@ -129,6 +140,7 @@ char *_strchr(char *string, char character)
 			return (string);
 	} while (*string++ != '\0');
 =======
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
  * *_strchr - locates a character in a string
  * @size: the string to be parsed
  * @count: the character to look for
@@ -142,7 +154,10 @@ char *_strchr(char *size, char count)
 	}
 
 	while (*size++ != '\0');
+<<<<<<< HEAD
+=======
 >>>>>>> 84ddf4ff1ea3706a2021dfea8bb16be8aac57619
+>>>>>>> 02876b477b7b27b384a8cefe7025f42ad78abf72
 
 	return (NULL);
 }
