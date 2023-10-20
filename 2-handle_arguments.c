@@ -26,7 +26,7 @@ void handle_command(char *buffer)
 	{
 		if (fork() == 0)
 		{
-			if (execve(full_path, args, NULL) == -1)
+			if (execve(full_path, args, environ) == -1)
 			{
 				perror("Error");
 				exit(EXIT_FAILURE);
