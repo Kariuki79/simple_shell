@@ -24,7 +24,6 @@ void handle_command(char *buffer)
 
 	if (find_executable_in_path(args[0], full_path, sizeof(full_path)))
 	{
-		
 		if (fork() == 0)
 		{
 			if (execve(full_path, args, environ) == -1)
