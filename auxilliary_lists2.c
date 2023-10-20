@@ -9,7 +9,8 @@
  * @length_val: length of the value.
  * Return: address of the head.
  */
-r_var *add_rvar_node(r_var **link_head, int length_var, char *val_var, int length_val)
+r_var *add_rvar_node(r_var **link_head, int length_var, char *val_var,
+		int length_val)
 {
 	r_var *new, *temp;
 
