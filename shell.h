@@ -16,6 +16,11 @@
 #define TOK_BUFSIZE 128
 #define TOK_DELIM " \t\r\n\a"
 
+void handle_command(char *buffer);
+int find_executable_in_path(const char *command, char *full_path, size_t max_length);
+
+int bfree(void **);
+
 /* Points to an array of pointers to strings called the "environment" */
 extern char **environ;
 
