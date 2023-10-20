@@ -30,7 +30,7 @@ sep_list *add_sep_node_end(sep_list **list_head, char splitter)
 		temp->next = new;
 	}
 
-	return (*head);
+	return (*list_head);
 }
 
 /**

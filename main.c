@@ -23,14 +23,14 @@ void free_data(data_shell *data_struct)
  * set_data - Initialize data structure
  *
  * @data_struct: data structure
- * @arg_v: argument vector
+ * @av: argument vector
  * Return: no return
  */
-void set_data(data_shell *data_struct, char **arg_v)
+void set_data(data_shell *data_struct, char **av)
 {
 	unsigned int index;
 
-	data_struct->arg_v = arg_v;
+	data_struct->av = av;
 	data_struct->input = NULL;
 	data_struct->args = NULL;
 	data_struct->status = 0;
@@ -39,7 +39,7 @@ void set_data(data_shell *data_struct, char **arg_v)
 	for (index = 0; environ[index]; index++)
 		;
 
-	datash->_environ = malloc(sizeof(char *) * (index + 1));
+	data_struct->_environ = malloc(sizeof(char *) * (index + 1));
 
 	for (index = 0; environ[index]; index++)
 	{
