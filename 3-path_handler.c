@@ -11,13 +11,8 @@ int find_executable_in_path(const char *command, char *full_path,
 		size_t max_length)
 {
 	char *path = getenv("PATH");
-	char *token;
-
-	if (command[0] == '/')
-	{
-		snprintf(full_path, max_length, "%s", command);
-		return (access(full_path, X_OK) == 0);
-	}
+	char *token = strtok(path, ":");
+	struct stat st;
 
 	if (path == NULL)
 	{
@@ -25,13 +20,11 @@ int find_executable_in_path(const char *command, char *full_path,
 		return (0);
 	}
 
-	token = strtok(path, ":");
-
 	while (token != NULL)
 	{
 		snprintf(full_path, max_length, "%s/%s", token, command);
 
-		if (access(full_path, X_OK) == 0)
+		if (stat(full_path, &st) == 0)
 		{
 			return (1);
 		}

@@ -24,10 +24,9 @@ void handle_command(char *buffer)
 
 	if (find_executable_in_path(args[0], full_path, sizeof(full_path)))
 	{
-		args[0] = full_path;
 		if (fork() == 0)
 		{
-			if (execve(args[0], args, NULL) == -1)
+			if (execve(full_path, args, NULL) == -1)
 			{
 				perror("Error");
 				exit(EXIT_FAILURE);
