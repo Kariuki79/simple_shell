@@ -19,13 +19,13 @@
 /* Points to an array of pointers to strings called the "environment" */
 extern char **environ;
 
-/* aux_lists.c */
+/* auxilliary_lists.c */
 sep_list *add_sep_node_end(sep_list **head, char sep);
 void free_sep_list(sep_list **head);
 line_list *add_line_node_end(line_list **head, char *line);
 void free_line_list(line_list **head);
 
-/* aux_lists2.c */
+/* auxilliary_lists2.c */
 r_var *add_rvar_node(r_var **head, int lvar, char *var, int lval);
 void free_rvar_list(r_var **head);
 
@@ -49,7 +49,7 @@ void aux_help_unsetenv(void);
 void aux_help_general(void);
 void aux_help_exit(void);
 
-/* aux_help2.c */
+/* auxilliary_help2.c */
 void aux_help(void);
 void aux_help_alias(void);
 void aux_help_cd(void);
