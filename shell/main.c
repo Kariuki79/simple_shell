@@ -53,19 +53,15 @@ void set_data(data_shell *datash, char **av)
 
 /**
 * main - Entry point
-* Return: datash.status
-* @ac: Arg count
-* @av: Arguments
+* Return: 0 if successful
 */
 
-int main(int ac, char **av)
+int main(void)
 {
 	char *buffer = NULL;
 	size_t bufsize = 0;
 	ssize_t chars;
 	char full_path[256];
-	data_shell datash;
-	(void) ac;
 
 	while (1)
 	{
@@ -93,10 +89,27 @@ int main(int ac, char **av)
 			fprintf(stderr, "%s: command not found\n", buffer);
 		}
 	}
+	return (0);
+}
+
+/**
+ * main - Entry point
+ *
+ * @ac: argument count
+ * @av: argument vector
+ *
+ * Return: 0 on success.
+ */
+int main(int ac, char **av)
+{
+	data_shell datash;
+	(void) ac;
+
 	signal(SIGINT, get_sigint);
-        set_data(&datash, av);
-        free_data(&datash);
+	set_data(&datash, av);
+	shell_loop(&datash);
+	free_data(&datash);
 	if (datash.status < 0)
-                return (255);
+		return (255);
 	return (datash.status);
 }
