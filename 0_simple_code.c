@@ -3,6 +3,8 @@
 
 /**
 * main - Entry point
+* @argc: counts args
+* @argv: args entered
 * Return: 0 if successful
 */
 
