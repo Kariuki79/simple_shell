@@ -95,7 +95,8 @@ int main(int ac, char **av)
 	}
 	signal(SIGINT, get_sigint);
         set_data(&datash, av);
-        free_data(&datash);
+        shell_loop(&datash);
+	free_data(&datash);
 	if (datash.status < 0)
                 return (255);
 	return (datash.status);
