@@ -8,7 +8,7 @@
 void handle_command(char *buffer)
 {
 	char *token;
-	char *args[100];
+	char *args[101];
 	int arg_count = 0;
 	char full_path[256];
 
@@ -24,9 +24,10 @@ void handle_command(char *buffer)
 
 	if (find_executable_in_path(args[0], full_path, sizeof(full_path)))
 	{
+		args[0] = full_path;
 		if (fork() == 0)
 		{
-			if (execve(full_path, args, NULL) == -1)
+			if (execve(args[0], args, NULL) == -1)
 			{
 				perror("Error");
 				exit(EXIT_FAILURE);
@@ -39,6 +40,6 @@ void handle_command(char *buffer)
 	}
 	else
 	{
-		fprintf(stderr, "%s: command not found\n", args[0]);
+		fprintf(stderr, "%s: No such file or directory\n", args[0]);
 	}
 }
