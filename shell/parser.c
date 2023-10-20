@@ -1,86 +1,62 @@
 #include "shell.h"
 
 /**
- * is_cmd - determines if a file is an executable command
- * @custom_info: the info struct
- * @custom_path: path to the file
- *
- * Return: 1 if true, 0 otherwise
+ **_memset - fills memory with a constant byte
+ *@size: the pointer to the memory area
+ *@buffer: the byte to fill *s with
+ *@numerator: the amount of bytes to be filled
+ *Return: (size) a pointer to the memory area size
  */
-int is_cmd(info_t *custom_info, char *custom_path)
+char *_memset(char *size, char buffer, unsigned int numerator)
 {
-	struct stat custom_stat;
+	unsigned int index;
 
-	(void)custom_info;
-	if (!custom_path || stat(custom_path, &custom_stat))
-		return (0);
-
-	if (custom_stat.st_mode & S_IFREG)
-	{
-		return (1);
-	}
-	return (0);
+	for (index = 0; index < numerator; index++)
+		size[index] = buffer;
+	return (size);
 }
 
 /**
- * dup_chars - duplicates characters
- * @custom_path_str: the PATH string
- * @custom_start: starting index
- * @custom_stop: stopping index
- *
- * Return: pointer to new buffer
+ * ffree - frees a string of strings
+ * @str_str: string of strings
  */
-char *dup_chars(char *custom_path_str, int custom_start, int custom_stop)
+void ffree(char **str_str)
 {
-	static char buf[1024];
-	int index = 0, key = 0;
+	char **a = str_str;
 
-	for (key = 0, index = custom_start; index < custom_stop; index++)
-		if (custom_path_str[index] != ':')
-			buf[key++] = custom_path_str[index];
-	buf[key] = 0;
-	return (buf);
+	if (!str_str)
+		return;
+	while (*str_str)
+		free(*str_str++);
+	free(a);
 }
 
 /**
- * find_path - finds the command in the PATH string
- * @custom_info: the info struct
- * @custom_path_str: the PATH string
- * @custom_cmd: the command to find
+ * _realloc - reallocates a block of memory
+ * @ptr: pointer to previous malloc'ated block
+ * @pre_size: byte size of previous block
+ * @current_size: byte size of new block
  *
- * Return: full path of cmd if found or NULL
+ * Return: pointer to da ol'block nameen.
  */
-char *find_path(info_t *custom_info, char *custom_path_str, char *custom_cmd)
+void *_realloc(void *ptr, unsigned int pre_size, unsigned int current_size)
 {
-	int index = 0, curr_pos = 0;
-	char *custom_path;
+	char *p;
 
-	if (!custom_path_str)
+	if (!ptr)
+		return (malloc(current_size));
+	if (!current_size)
+		return (free(ptr), NULL);
+	if (current_size == pre_size)
+		return (ptr);
+
+	p = malloc(current_size);
+	if (!p)
 		return (NULL);
-	if ((_strlen(custom_cmd) > 2) && starts_with(custom_cmd, "./"))
-	{
-		if (is_cmd(custom_info, custom_cmd))
-			return (custom_cmd);
-	}
-	while (1)
-	{
-		if (!custom_path_str[index] || custom_path_str[index] == ':')
-		{
-			custom_path = dup_chars(custom_path_str, curr_pos, index);
-			if (!*custom_path)
-				_strcat(custom_path, custom_cmd);
-			else
-			{
-				_strcat(custom_path, "/");
-				_strcat(custom_path, custom_cmd);
-			}
-			if (is_cmd(custom_info, custom_path))
-				return (custom_path);
-			if (!custom_path_str[index])
-				break;
-			curr_pos = index;
-		}
-		index++;
-	}
-	return (NULL);
+
+	pre_size = pre_size < current_size ? pre_size : current_size;
+	while (pre_size--)
+		p[pre_size] = ((char *)ptr)[pre_size];
+	free(ptr);
+	return (p);
 }

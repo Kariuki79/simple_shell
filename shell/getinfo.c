@@ -1,9 +1,10 @@
 #include "shell.h"
+
 /**
- * initialize_info - sets initial values for info_t struct
- * @info: Address of the info_t struct
+ * clear_info - initializes info_t struct
+ * @info: struct address
  */
-void initialize_info(info_t *info)
+void clear_info(info_t *info)
 {
 	info->arg = NULL;
 	info->argv = NULL;
@@ -12,68 +13,62 @@ void initialize_info(info_t *info)
 }
 
 /**
- * configure_info - configures the info_t struct with user input
- * @info: Address of the info_t struct
- * @arguments: Argument vector
+ * set_info - initializes info_t struct
+ * @info: struct address
+ * @av: argument vector
  */
-void configure_info(info_t *info, char **arguments)
+void set_info(info_t *info, char **av)
 {
-	int index = 0;
+	int i = 0;
 
-	info->fname = arguments[0];
-
-	if (info->arguments)
+	info->fname = av[0];
+	if (info->arg)
 	{
 		info->argv = strtow(info->arg, " \t");
-
 		if (!info->argv)
 		{
+
 			info->argv = malloc(sizeof(char *) * 2);
 			if (info->argv)
 			{
-				info->argv[0] = duplicate_string(info->arguments);
+				info->argv[0] = _strdup(info->arg);
 				info->argv[1] = NULL;
 			}
 		}
-		for (index = 0; info->argv && info->argv[index]; index++)
+		for (i = 0; info->argv && info->argv[i]; i++)
 			;
-		info->argc = index;
+		info->argc = i;
+
 		replace_alias(info);
 		replace_vars(info);
 	}
 }
 
 /**
- * deallocate_info - frees allocated memory in the info_t struct
- * @info: Address of the info_t struct
- * @release_all: True if all fields should be freed
+ * free_info - frees info_t struct fields
+ * @info: struct address
+ * @all: true if freeing all fields
  */
-void deallocate_info(info_t *info, int release_all)
+void free_info(info_t *info, int all)
 {
 	ffree(info->argv);
 	info->argv = NULL;
 	info->path = NULL;
-
-	if (release_all)
+	if (all)
 	{
 		if (!info->cmd_buf)
 			free(info->arg);
-
-		if (info->environ)
-			free_list(&(info->environ));
-
+		if (info->env)
+			free_list(&(info->env));
 		if (info->history)
 			free_list(&(info->history));
-
 		if (info->alias)
 			free_list(&(info->alias));
-		free_string_array(info->environment_variables);
-		info->environ = NULL;
+		ffree(info->environ);
+			info->environ = NULL;
 		bfree((void **)info->cmd_buf);
-
-		if (info->read_file_descriptor > 2)
+		if (info->readfd > 2)
 			close(info->readfd);
-		write(2, BUF_FLUSH, 1);
+		_putchar(BUF_FLUSH);
 	}
 }
-
