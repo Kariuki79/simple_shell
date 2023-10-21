@@ -5,8 +5,6 @@
  * @newptr: destination ptr
  * @ptr: source ptr
  * @size: size of the new ptr
- *
- * Return: no return.
  */
 void _memcpy(void *newptr, const void *ptr, unsigned int size)
 {
