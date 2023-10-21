@@ -79,7 +79,6 @@ int main(int ac, char **av)
 			free(buffer);
 			exit(EXIT_SUCCESS);
 		}
-
 		buffer[chars - 1] = '\0';
 
 		if (find_executable_in_path(buffer, full_path, sizeof(full_path)))
@@ -94,10 +93,10 @@ int main(int ac, char **av)
 		}
 	}
 	signal(SIGINT, get_sigint);
-        set_data(&datash, av);
-        shell_loop(&datash);
+	set_data(&datash, av);
+	shell_loop(&datash);
 	free_data(&datash);
 	if (datash.status < 0)
-                return (255);
+		return (255);
 	return (datash.status);
-}
+g
