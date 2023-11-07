@@ -1,1 +1,1 @@
-This is a group simple_shell project
+ALx Custom shell peer project
